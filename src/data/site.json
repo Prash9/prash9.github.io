@@ -1,13 +1,13 @@
 {
-  "name": "Eleventy Duo",
-  "description": "Eleventy Duo is a minimal and beautiful Eleventy theme for personal blogs.",
-  "url": "https://eleventyduo.netlify.app",
+  "name": "Prash9",
+  "description": "Write about ideas, technical concepts and share my work here",
+  "url": "https://prash9.github.io",
   "author": {
-    "name": "Author Name",
-    "email": "author@site.com",
+    "name": "Prashant K",
+    "email": "prashantkengg@gmail.com",
     "twitterHandle": "author_handle"
   },
-  "defaultSocialImage": "/images/default-social-image.png",
+  "defaultSocialImage": "/images/title-image.png",
   "headerLinks": [
     {
       "text": "Blog",
@@ -28,7 +28,7 @@
     },
     {
       "text": "GitHub",
-      "url": "https://github.com/yinkakun/eleventy-duo",
+      "url": "https://github.com/prash9",
       "external": true
     },
     {
