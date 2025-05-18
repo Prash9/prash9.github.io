@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://prash9.github.io/sitemap.xml
