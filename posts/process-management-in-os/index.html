@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href=https://prash9.github.io/posts/process-management-in-os/>
+    <link rel="alternate" type="application/rss+xml" href="/feed.xml" title="Feed">
+
+    <link href="/assets/main.a2a860c21c2eaf8beb63.css" rel="stylesheet" />
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap" rel="stylesheet">
+
+    <title>
+      Process management in OS
+      
+         | Prash9
+      
+    </title>
+
+    <link rel="icon" type= “image/x-icon” href="/images/favicon.ico">
+
+    <meta property="og:title" content="Process management in OS">
+    <meta property="og:site_name" content="Prash9"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://prash9.github.io/posts/process-management-in-os/"/>
+    <meta name="twitter:card" content="summary_large_image">
+
+    
+      <meta name="twitter:creator" content="@author_handle"/>
+    
+
+    
+    
+    
+      <meta name="description" content="Walk through of how a process works, its componenets, how the CPU interacts with the process. Have also described how this can be used practically.">
+      <meta property="og:description" content="Walk through of how a process works, its componenets, how the CPU interacts with the process. Have also described how this can be used practically.">
+      <meta name="description" content="Walk through of how a process works, its componenets, how the CPU interacts with the process. Have also described how this can be used practically."/>
+    
+
+    
+      
+    
+    
+      <meta property="og:image" content="https://prash9.github.io/images/title-image.png"/>
+      <meta name="twitter:image" content="https://prash9.github.io/images/title-image.png"/>
+    
+
+    
+      <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+      <script>mermaid.initialize({startOnLoad:true});</script>
+    
+  </head>
+  <body>
+    <div class="layout-wrapper">
+
+      <header class="header">
+        <div class="header__content">
+          <h1 class="site-title">
+            <a href=/>
+              Prash9
+            </a>
+          </h1>
+
+          
+            <nav class="nav">
+              <ul class="nav__list">
+                
+                  
+                  
+
+                  
+
+                  
+
+                  <li class="nav-item">
+                    <a href="/blog"  >Blog</a>
+                  </li>
+                
+                  
+                  
+
+                  
+
+                  
+
+                  <li class="nav-item">
+                    <a href="/about"  >About</a>
+                  </li>
+                
+              </ul>
+            </nav>
+
+          
+
+        </div>
+      </header>
+
+      <main class="main">
+        
+<article class="post">
+  <header class="post__header">
+    <h1>Process management in OS</h1>
+    <div class="post__details">
+      <time datetime="2025-05-18">
+        18 May 2025
+      </time>
+      <span> | </span>
+      <span>3 min read</span>
+    </div>
+  </header>
+
+  <main class="post__content">
+    <h2>Overview</h2>
+<p>If you are looking to learn system languages like Rust, C after working on langugaes like Python, JS, you might face lot of challenges. So before directly jumping into using system languages, you should be familiar with lot of operating system concepts. Mainly memory management, system calls, pointer, process management etc.</p>
+<p>I will be start the blog series with process memory and then move to other concepts.
+They are the fundament parts of any memory space of a process. I will go over the usage of these data structures and how instructions flow from application to OS to CPU. Also how this knowledge can help you writing better code</p>
+<p>The OS manages all its processes using process control block (PCB). The PCB is a doubly linked list of process metadata that are currently running. The metadata contains process state, PID, CPU register and program counter data to the last executed instruction before CPU interrupt, priority of the process, location to the process etc</p>
+<pre><code>
++----------------+      +----------------+      +----------------+
+|    PCB (Proc1) | &lt;--&gt; |    PCB (Proc2) | &lt;--&gt; |    PCB (Proc3) |
++----------------+      +----------------+      +----------------+
+
+Each PCB contains:
+
++-----------------------------+
+| Process State: Running      |
+| PID: 101                    |
+| CPU Registers: [R1, R2, ...]|
+| Program Counter: 0x0040A2F0 |
+| Priority: 5                 |
+| Memory Location: 0x10000000 |
+| Prev PCB: pointer           |
+| Next PCB: pointer           |
++-----------------------------+
+
+</code></pre>
+<p>The process itself is stored in memory containing segments mainly:</p>
+<ul>
+<li><strong>Text Segment</strong>: Contains the compiled code</li>
+<li><strong>Data:</strong> Contains global variables and static data</li>
+<li><strong>Heap:</strong> Can be used to dynamically allocate memory using functions like malloc</li>
+<li><strong>Stack:</strong> Stores function/local variables, method parameters, return addresses</li>
+</ul>
+<pre><code>
+Higher Memory Addresses
++-----------------------+
+|                 Stack |  &lt;-- grows downward (toward lower addresses)
++-----------------------+
+|                       |
+|                       |
+|                 Heap  |  &lt;-- grows upward (toward higher addresses)
++-----------------------+
+|      Data Segment     |
++-----------------------+
+|       Text Segment    |  &lt;-- program code, read-only
++-----------------------+
+Lower Memory Addresses
+
+</code></pre>
+<p><strong>Stack:</strong></p>
+<ul>
+<li>The memory allocated to stack can vary from few 16 KB to 10 MB. Each function is loaded in the stack along with its args, variables, return address. It is a <code>contiguous</code> memory address.</li>
+<li>The stack data is placed at the higher address space in a process and it grows in downward direction in the process memory i.e higher memory address to lower memory address. In cases of uncontrolled recursion or too many local variables, there can be <strong>stack overflow</strong>, due to stack's limited size.</li>
+<li>Each variable allocated on the stack has a size determined at <strong>compile time</strong> based on its type. For example, an <code>int</code> might be 4 bytes, a <code>double</code> 8 bytes, and so on. This size does not change during execution.</li>
+<li>Some key pointers in a stack are Stack Pointer, Frame Pointer.
+<ul>
+<li><strong>Frame Pointer:</strong> A <code>frame</code> represents the memory allocated for an individual <code>function</code> call on the stack, known as a <code>stack frame</code>. The Frame Pointer points to a fixed base address within this frame, providing a stable reference for accessing function parameters and local variables. This pointer is stored in a CPU register-called <strong>EBP</strong> in 32-bit architectures and <strong>RBP</strong> in 64-bit architectures.</li>
+<li><strong>Stack Pointer:</strong>  The Stack Pointer points to the current top of the stack-the location where the next push or pop operation will occur. It is updated frequently as data is pushed onto or popped from the stack. The Stack Pointer is stored in the <strong>ESP</strong> register on 32-bit architectures and <strong>RSP</strong> on 64-bit architectures.</li>
+</ul>
+</li>
+</ul>
+<pre><code>
+Higher Memory Addresses
++-----------------------+
+| Function Arguments    |  (EBP + 8, EBP + 12, ...)
++-----------------------+
+| Return Address        |  (EBP + 4)
++-----------------------+
+| Saved Caller func EBP |  (EBP)  &lt;-- old frame pointer saved on stack
++-----------------------+
+| Local Variables       |  (EBP - 4, EBP - 8, ...)
++-----------------------+
+| 	TOP OF STACK        |  (ESP)
++-----------------------+
+Lower Memory Addresses
+
+</code></pre>
+<p>There are stack components which are useful to know since they are used in various application
+which is explained later.</p>
+<p><strong>Heap:</strong></p>
+<ul>
+<li>Developers can get memory allocated in the heap dynamically using system calls like malloc/new etc.</li>
+<li>Initially the OS responds to these system calls responds by providing a chunk of memory, usually larger than the asked size.</li>
+<li>When we store variable on this memory block, that address pointer is stored in the stack.</li>
+<li>The data stored on heap is not contiguous since the any variable can be stored or removed at any point in time, unlike the stack. This cause memory fragmentation in the memory block. i.e lot of gaps between occupied memory address.</li>
+</ul>
+<pre><code>
+|uint8|tempfiledata||empty|string|empty|float64|empty|empty|tempfiledata|empty
+			    			HEAP MEMORY BLOCK CONTAINING FRAGMENTED DATA
+</code></pre>
+<ul>
+<li>When we again allocate some memory, the existing memory chunk is used to see if there is space available in it. The function malloc/new first check if the memory block has enough space using <strong>FirstFit</strong>, <strong>BestFit</strong>, <strong>WorstFit</strong> algorithms, if not a system call is made to get more memory.</li>
+<li>Dynamic memory allocation makes the heap risk prone to memory leaks, dangling pointers etc</li>
+</ul>
+<h5>Usage (elaborate below points)</h5>
+<ul>
+<li>Based on the above knowledge, in system programming, we should allocate memory at compile time i.e stack for better performance. Heap has penalties of memory allocation like system call and search algorithms.</li>
+<li>Observability tools are built on the knowledge of CPU register like EBP, ESP and data in the stack relative to these pointers. This along with eBPF () hooks</li>
+<li>Static analyzers</li>
+</ul>
+<h4>Example in Rust</h4>
+<h2>References</h2>
+<ul>
+<li><a href="URL">Reference 1</a> - Read more about epoll, select, kqueue</li>
+<li><a href="https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/3_Processes.html">OS Notes</a> <a href="https://techcaps.ie/components-of-a-process-in-operating-system/">Tech Caps</a></li>
+</ul>
+<hr>
+
+  </main>
+
+  <aside class="post__aside">
+    <div class="post__tags">
+      
+        
+        <a href="/tags/os/">#os</a>
+      
+        
+        <a href="/tags/process/">#process</a>
+      
+    </div>
+
+    <nav class="post__pagination">
+
+        <a href="/posts/a-post-with-mermaid-charts/">
+          <span>A post with mermaid charts</span>
+          <span>→</span>
+        </a>
+
+      
+    </nav>
+  </aside>
+
+</article>
+      </main>
+
+      <footer class="footer">
+        <div class="footer__content">
+
+          <ul class="hero__social-links">
+            
+              
+                
+
+                
+                  
+                
+
+                <li>
+                  <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" >Instagram</a>
+                </li>
+              
+                
+
+                
+                  
+                
+
+                <li>
+                  <a href="https://github.com/prash9" target="_blank" rel="noopener noreferrer" >GitHub</a>
+                </li>
+              
+                
+
+                
+                  
+                
+
+                <li>
+                  <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" >Twitter</a>
+                </li>
+              
+            
+
+            
+
+              
+                
+
+                
+                  
+                
+
+                <li>
+                  <a href="/feed.xml" target="_blank" rel="noopener noreferrer" >RSS</a>
+                </li>
+              
+            
+          </ul>
+
+          
+            <p class="footer__attribution">
+          Created by
+      <a href="https://twitter.com/yinkakun" target="_blank" rel="noopener">Prash9,</a>
+       Powered by <a href="https://www.11ty.dev" target="_blank" rel="noopener">11ty,</a>
+         <a href="https://github.com/yinkakun/eleventy-duo" target="_blank" rel="noopener noreferrer">Duo Theme</a>
+            </p>
+          
+
+        </div>
+      </div>
+
+    </footer>
+
+    <script src="/assets/main.31d6cfe0d16ae931b73c.js"></script>
+  </body>
+</html>

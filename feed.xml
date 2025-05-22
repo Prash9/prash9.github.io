@@ -5,7 +5,7 @@
   <link href="https://prash9.github.io/feed.xml" rel="self"/>
   <link href="https://prash9.github.io/"/>
   
-    <updated>2021-06-28T00:00:00Z</updated>
+    <updated>2025-05-18T00:00:00Z</updated>
   
   <id>https://prash9.github.io</id>
   <author>
@@ -373,31 +373,117 @@
   
     
     <entry>
-      <title>A post containing code block with very long lines of code</title>
-      <link href="https://prash9.github.io/posts/a-post-containing-code-block-with-very-long-lines-of-code/"/>
-      <updated>2021-06-28T00:00:00Z</updated>
-      <id>https://prash9.github.io/posts/a-post-containing-code-block-with-very-long-lines-of-code/</id>
+      <title>Process management in OS</title>
+      <link href="https://prash9.github.io/posts/process-management-in-os/"/>
+      <updated>2025-05-18T00:00:00Z</updated>
+      <id>https://prash9.github.io/posts/process-management-in-os/</id>
       <content type="html">
         <![CDATA[
-      <p>Health goth raw denim vaporware waistcoat, vegan neutra glossier. Cronut chartreuse tbh meh schlitz. Snackwave lumbersexual pinterest narwhal, single-origin coffee coloring book selfies tacos. Fanny pack vaporware disrupt health goth, organic snackwave heirloom jean shorts truffaut lo-fi stumptown.</p>
-<h2>The <code>.full-bleed</code> utility</h2>
-<pre class="language-js"><code class="language-js"><span class="token keyword">const</span> <span class="token function-variable function">toFixed</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">n<span class="token punctuation">,</span> fixed</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token operator">~</span><span class="token operator">~</span><span class="token punctuation">(</span>Math<span class="token punctuation">.</span><span class="token function">pow</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> fixed<span class="token punctuation">)</span> <span class="token operator">*</span> n<span class="token punctuation">)</span> <span class="token operator">/</span> Math<span class="token punctuation">.</span><span class="token function">pow</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> fixed<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <h2>Overview</h2>
+<p>If you are looking to learn system languages like Rust, C after working on langugaes like Python, JS, you might face lot of challenges. So before directly jumping into using system languages, you should be familiar with lot of operating system concepts. Mainly memory management, system calls, pointer, process management etc.</p>
+<p>I will be start the blog series with process memory and then move to other concepts.
+They are the fundament parts of any memory space of a process. I will go over the usage of these data structures and how instructions flow from application to OS to CPU. Also how this knowledge can help you writing better code</p>
+<p>The OS manages all its processes using process control block (PCB). The PCB is a doubly linked list of process metadata that are currently running. The metadata contains process state, PID, CPU register and program counter data to the last executed instruction before CPU interrupt, priority of the process, location to the process etc</p>
+<pre><code>
++----------------+      +----------------+      +----------------+
+|    PCB (Proc1) | &lt;--&gt; |    PCB (Proc2) | &lt;--&gt; |    PCB (Proc3) |
++----------------+      +----------------+      +----------------+
 
-<span class="token comment">// Examples</span>
-<span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">25.198726354</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 25.1</span>
-<span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">25.198726354</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 25.19</span>
-<span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">25.198726354</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 25.198</span>
-<span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">25.198726354</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 25.1987</span>
-<span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">25.198726354</span><span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 25.19872</span>
-<span class="token function">toFixed</span><span class="token punctuation">(</span><span class="token number">25.198726354</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 25.198726</span></code></pre>
-<h2>Heading</h2>
-<p>Staff engagement highlights yet are we in agreeance, nor time vampire yet programmatically. Imagineer proceduralize. Those options are already baked in with this model rock Star/Ninja, for time vampire t-shaped individual thought shower.</p>
-<p>Closing these latest prospects is like putting socks on an octopus even dead cats bounce, and herding cats, so deploy, for come up with something buzzworthy, nor come up with something buzzworthy we are running out of runway. PowerPointless idea shower. Cross sabers moving the goalposts. Gain traction.</p>
-<p>Curate I just wanted to give you a heads-up. Move the needle. Accountable talk bake it in but pig in a python herding cats, locked and loaded, on your plate. Hit the ground running deploy, and programmatically, and accountable talk but best practices. Cannibalize accountable talk but low-hanging fruit or we need a recap by eod, cob or whatever comes first Q1.</p>
-<h2>Heading</h2>
-<p>Draw a line in the sand time vampire translating our vision of having a market leading platfrom. Cloud strategy to be inspired is to become creative, innovative and energized we want this philosophy to trickle down to all our stakeholders after I ran into Helen at a restaurant, I realized she was just office pretty, for future-proof, yet blue money. Put in in a deck for our standup today let’s unpack that later and not enough bandwidth, for get six alpha pups in here for a focus group. Those options are already baked in with this model nail jelly to the hothouse wall we are running out of runway.</p>
-<h2>Heading</h2>
-<p>Upsell we need to socialize the comms with the wider stakeholder community bench mark accountable talk nor price point. Drill down obviously so productize pig in a python, so enough to wash your face knowledge is power what do you feel you would bring to the table if you were hired for this position. New economy. Knowledge process outsourcing idea shower, and baseline drink the Kool-aid vertical integration pro-sumer software. Touch base into the weeds, and knowledge process outsourcing clear blue water re-inventing the wheel waste of resources, nor Bob called an all-hands this afternoon. I don’t want to drain the whole swamp, i just want to shoot some alligators.</p>
+Each PCB contains:
+
++-----------------------------+
+| Process State: Running      |
+| PID: 101                    |
+| CPU Registers: [R1, R2, ...]|
+| Program Counter: 0x0040A2F0 |
+| Priority: 5                 |
+| Memory Location: 0x10000000 |
+| Prev PCB: pointer           |
+| Next PCB: pointer           |
++-----------------------------+
+
+</code></pre>
+<p>The process itself is stored in memory containing segments mainly:</p>
+<ul>
+<li><strong>Text Segment</strong>: Contains the compiled code</li>
+<li><strong>Data:</strong> Contains global variables and static data</li>
+<li><strong>Heap:</strong> Can be used to dynamically allocate memory using functions like malloc</li>
+<li><strong>Stack:</strong> Stores function/local variables, method parameters, return addresses</li>
+</ul>
+<pre><code>
+Higher Memory Addresses
++-----------------------+
+|                 Stack |  &lt;-- grows downward (toward lower addresses)
++-----------------------+
+|                       |
+|                       |
+|                 Heap  |  &lt;-- grows upward (toward higher addresses)
++-----------------------+
+|      Data Segment     |
++-----------------------+
+|       Text Segment    |  &lt;-- program code, read-only
++-----------------------+
+Lower Memory Addresses
+
+</code></pre>
+<p><strong>Stack:</strong></p>
+<ul>
+<li>The memory allocated to stack can vary from few 16 KB to 10 MB. Each function is loaded in the stack along with its args, variables, return address. It is a <code>contiguous</code> memory address.</li>
+<li>The stack data is placed at the higher address space in a process and it grows in downward direction in the process memory i.e higher memory address to lower memory address. In cases of uncontrolled recursion or too many local variables, there can be <strong>stack overflow</strong>, due to stack's limited size.</li>
+<li>Each variable allocated on the stack has a size determined at <strong>compile time</strong> based on its type. For example, an <code>int</code> might be 4 bytes, a <code>double</code> 8 bytes, and so on. This size does not change during execution.</li>
+<li>Some key pointers in a stack are Stack Pointer, Frame Pointer.
+<ul>
+<li><strong>Frame Pointer:</strong> A <code>frame</code> represents the memory allocated for an individual <code>function</code> call on the stack, known as a <code>stack frame</code>. The Frame Pointer points to a fixed base address within this frame, providing a stable reference for accessing function parameters and local variables. This pointer is stored in a CPU register-called <strong>EBP</strong> in 32-bit architectures and <strong>RBP</strong> in 64-bit architectures.</li>
+<li><strong>Stack Pointer:</strong>  The Stack Pointer points to the current top of the stack-the location where the next push or pop operation will occur. It is updated frequently as data is pushed onto or popped from the stack. The Stack Pointer is stored in the <strong>ESP</strong> register on 32-bit architectures and <strong>RSP</strong> on 64-bit architectures.</li>
+</ul>
+</li>
+</ul>
+<pre><code>
+Higher Memory Addresses
++-----------------------+
+| Function Arguments    |  (EBP + 8, EBP + 12, ...)
++-----------------------+
+| Return Address        |  (EBP + 4)
++-----------------------+
+| Saved Caller func EBP |  (EBP)  &lt;-- old frame pointer saved on stack
++-----------------------+
+| Local Variables       |  (EBP - 4, EBP - 8, ...)
++-----------------------+
+| 	TOP OF STACK        |  (ESP)
++-----------------------+
+Lower Memory Addresses
+
+</code></pre>
+<p>There are stack components which are useful to know since they are used in various application
+which is explained later.</p>
+<p><strong>Heap:</strong></p>
+<ul>
+<li>Developers can get memory allocated in the heap dynamically using system calls like malloc/new etc.</li>
+<li>Initially the OS responds to these system calls responds by providing a chunk of memory, usually larger than the asked size.</li>
+<li>When we store variable on this memory block, that address pointer is stored in the stack.</li>
+<li>The data stored on heap is not contiguous since the any variable can be stored or removed at any point in time, unlike the stack. This cause memory fragmentation in the memory block. i.e lot of gaps between occupied memory address.</li>
+</ul>
+<pre><code>
+|uint8|tempfiledata||empty|string|empty|float64|empty|empty|tempfiledata|empty
+			    			HEAP MEMORY BLOCK CONTAINING FRAGMENTED DATA
+</code></pre>
+<ul>
+<li>When we again allocate some memory, the existing memory chunk is used to see if there is space available in it. The function malloc/new first check if the memory block has enough space using <strong>FirstFit</strong>, <strong>BestFit</strong>, <strong>WorstFit</strong> algorithms, if not a system call is made to get more memory.</li>
+<li>Dynamic memory allocation makes the heap risk prone to memory leaks, dangling pointers etc</li>
+</ul>
+<h5>Usage (elaborate below points)</h5>
+<ul>
+<li>Based on the above knowledge, in system programming, we should allocate memory at compile time i.e stack for better performance. Heap has penalties of memory allocation like system call and search algorithms.</li>
+<li>Observability tools are built on the knowledge of CPU register like EBP, ESP and data in the stack relative to these pointers. This along with eBPF () hooks</li>
+<li>Static analyzers</li>
+</ul>
+<h4>Example in Rust</h4>
+<h2>References</h2>
+<ul>
+<li><a href="URL">Reference 1</a> - Read more about epoll, select, kqueue</li>
+<li><a href="https://www.cs.uic.edu/~jbell/CourseNotes/OperatingSystems/3_Processes.html">OS Notes</a> <a href="https://techcaps.ie/components-of-a-process-in-operating-system/">Tech Caps</a></li>
+</ul>
+<hr>
 
     ]]>
       </content>
